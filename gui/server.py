@@ -27,9 +27,14 @@ from copy import copy
 MONGO_PERF_HOST = "localhost"
 MONGO_PERF_PORT = 27017
 MP_DB_NAME = "bench_results"
+MP_DB_USER = "PLACEHOLDER_FOR_MONGODB_USER"
+MP_DB_PASSWORD = "PLACEHOLDER_FOR_MONGODB_PASSWORD"
 db = pymongo.Connection(host=MONGO_PERF_HOST, 
                          port=MONGO_PERF_PORT)[MP_DB_NAME]
-
+try:
+    db.authenticate(MP_DB_USER, MP_DB_PASSWORD)
+except KeyError:
+    f.logger.debug('KeyError: Not authenticating.')
 
 @route('/static/:filename#.*#')
 def send_static(filename):
